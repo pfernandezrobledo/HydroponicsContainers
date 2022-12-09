@@ -20,6 +20,9 @@ dotnet aspnet-codegenerator - Runs the ASP.NET Core scaffolding engine. dotnet a
 dotnet tool install -g dotnet-aspnet-codegenerator
 
 
+# Install EF Core packages for SQL and Cosmos
 
-
-
+PM> Install-Package Microsoft.EntityFrameworkCore
+PM> Install-Package Microsoft.EntityFrameworkCore.Tools
+PM> Install-Package Microsoft.EntityFrameworkCore.SqlServer
+PM> Install-Package Microsoft.EntityFrameworkCore.Cosmos

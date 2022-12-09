@@ -1,23 +1,40 @@
-﻿namespace calcium.api.Models
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace calcium.api.Models
 {
+	[PrimaryKey(nameof(Id), nameof(Code))]
 	public class HydroPod
 	{
-		public string Code
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public Guid Id
 		{ get; set; }
 
-		public string Name
+		[Key]
+		public string? Code
 		{ get; set; }
 
-		public string Description
+		public string? Name
 		{ get; set; }
 
-		public Address Address
+		public string? Description
 		{ get; set; }
 
-		public GeoLocation GeoLocation
-		{ get; set; }
+		public Guid AddressId { get; set; }
 
-		public ContainerGrowType ContainerGrow
+		[ForeignKey("AddressId")]
+		public Address? Address
+		{ get; set; } = new Address();
+
+		public Guid GeoLocationId { get; set; }
+
+		[ForeignKey("GeoLocationId")]
+		public GeoLocation? GeoLocation
+		{ get; set; } = new GeoLocation();
+
+		public ContainerGrowType? ContainerGrow
 		{ get; set; }
 
 		public InsulationMaterialType insulationMaterial

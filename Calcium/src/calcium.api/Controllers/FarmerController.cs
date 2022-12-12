@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using calcium.api.Application;
 using calcium.api.Infrastructure.DataServices;
 using calcium.api.Models;
+using calcium.domain.Interfaces.Application;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 
 namespace calcium.api
 {
@@ -15,59 +17,43 @@ namespace calcium.api
 	[ApiController]
 	public class FarmerController : ControllerBase
 	{
-		private FarmerSqlDbContext farmerSqlDbContext;
-		private FarmerCosmosDbContext farmerCosmosDbContext;
-		private FarmerAppService farmerService;
+		private IFarmerAppService farmerService;
 
-		public FarmerController(FarmerSqlDbContext farmerSqlDbContext, FarmerCosmosDbContext farmerCosmosDbContext)
+		public FarmerController(IFarmerAppService farmerService)
 		{
-			/*
-			NOTE: For the first version we will send the DB Context in the controller, to do a Controller to DB call.
-			When we update the project to use contracts/interfaecs and Dependency Injection, we will allow all references to be injected according to the clean arch design
-			
-			*/
-			this.farmerSqlDbContext = farmerSqlDbContext;
-			this.farmerCosmosDbContext = farmerCosmosDbContext;
-
-			this.farmerService = new FarmerAppService();
+			// CODE: Configure the dependency injection for IFarmerService so that it resolves to a scoped instance of FarmerAppService
+			// CODE: Set 'farmerService' of this instance to the 'farmerService' sent as the input in this constructior			
 		}
 
 
 		[HttpPost(Name = "CreateFarmer")]
 		public async Task<ActionResult<Farmer>> CreateFarmer([FromBody] Farmer entity)
 		{
-			// Validate the entity's properties
+			// CODE:Validate the input entity's properties
 
-			// We don't really need to validate the http method, asp.net middleware should take care of returning a HTTP 405 Method Not Allowed
+			// CODE: Call CreateFarmer on the IFarmerAppService
 
-			// Call the application or infrastructure component.  Preferably the app layer first
+			// CODE: Set the 'result' to the returned Farmer entity 
+			var result = new Farmer();
 
-			// ??? var result = await farmerService.CreateFarmer(entity);
+			// CODE: Handle any unexpected or application errors and return a friendly status message.
 
-			this.farmerSqlDbContext.Farmers.Add(entity);
-			this.farmerSqlDbContext.SaveChanges();
-
-			this.farmerCosmosDbContext.Farmers.Add(entity);
-
-			this.farmerCosmosDbContext.SaveChanges();
-
-			// Handle any unexpected or application errors and return a friendly status message
-
-			// If the operaion succeeds, then return the created farmer entity.
-
-			return CreatedAtRoute("GeFarmer", new { code = entity.Code }, entity);
+			return CreatedAtRoute("GetFarmer", new { code = result.Code }, result);
 		}
 
-		[HttpGet("{code}", Name = "GeFarmer")]
-		public async Task<ActionResult<Farmer>> CreateFarmer(string code)
+		[HttpGet("{code}", Name = "GetFarmer")]
+		public async Task<ActionResult<Farmer>> GetFarmer(string code)
 		{
-			return new JsonResult(
-				new Farmer
-				{
-					Code = code,
-					Name = "Farmer " + code
-				}
-				);
+			// CODE:Validate the input
+
+			// CODE: Call GetFarmer on the IFarmerAppService (You will need to implement it)
+
+			// CODE: Set the 'result' to the returned Farmer entity 
+			var result = new Farmer();
+
+			// CODE: Handle any unexpected or application errors and return a friendly status message.
+
+			return new JsonResult(result);
 		}
 
 	}

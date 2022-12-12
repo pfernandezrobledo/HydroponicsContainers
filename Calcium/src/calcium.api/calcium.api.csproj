@@ -23,4 +23,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\calcium.application\calcium.application.csproj" />
+    <ProjectReference Include="..\calcium.domain\calcium.domain.csproj" />
+    <ProjectReference Include="..\calcium.infrastructure\calcium.infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
